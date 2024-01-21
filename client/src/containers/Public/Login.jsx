@@ -4,7 +4,8 @@ import { InputForm , Button } from '../../components'
 const Login = () =>
 {
     return (
-        <div className="bg-white mw-600 p-[30px] pb-[100px] rounded-md shadow-sm">
+        <div className='w-full flex items-center justify-center'>
+            <div className="bg-white w-[600px] p-[30px] pb-[100px] rounded-md shadow-sm">
             <h3 className="text-2xl font-semibold mb-3">Đăng Nhập</h3>
             <div className="w-full flex flex-col gap-5 ">
                 <InputForm label={'SỐ ĐIỆN THOẠI'} />
@@ -21,6 +22,7 @@ const Login = () =>
                  <small className="text-[blue] hover:text-[red]">Tạo mật khẩu mới</small>
             </div>
            
+        </div>
         </div>
     )
 }
