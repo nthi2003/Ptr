@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { InputForm, Button } from '../../components'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import * as actions from "../../store/actions"
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Login = () => {
     const location = useLocation()
     const dispath = useDispatch()
-
-
+    const navigate = useNavigate()
+    const { isLoggedIn } = useSelector(state => state.auth)
     const [isRegister, setIsRegister] = useState(location.state?.flag)
     const [invalidFields, setInvalidFields] = useState([])
     const [payload, setPayload] = useState({
@@ -20,18 +20,21 @@ const Login = () => {
     useEffect(() => {
         setIsRegister(location.state?.flag)
     }, [location.state?.flag])
-
+    useEffect(() => {
+        isLoggedIn && navigate('/')
+    }, [isLoggedIn])
+    
     const handleSubmit = async () => {
-        console.log(payload)
-        // isRegister ? dispath(actions.register(payload)) : dispath(actions.login(payload))
-        // console.log(response);
-       let invalids = validate(payload);
-       console.log(invalids)
-       console.log(invalidFields)
+        let finalPayload = isRegister ? payload : {
+            phone: payload.phone,
+            password: payload.password
+        }
+        let invalids = validate(finalPayload)
+        if (invalids === 0) isRegister ? dispath(actions.register(payload)) : dispath(actions.login(payload))
+
     }
-    console.log(invalidFields)
+
     const validate = (payload) => {
-        console.log(payload)
         let invalids = 0
         let fields = Object.entries(payload)
         fields.forEach(item => {
@@ -44,27 +47,26 @@ const Login = () => {
             }
         })
         fields.forEach(item => {
-            switch (item[0]){
+            switch (item[0]) {
                 case 'password':
-                    if(item[1].length < 6) {
+                    if (item[1].length < 6) {
                         setInvalidFields(prev => [...prev, {
                             name: item[0],
                             message: 'Mật khẩu phải có tối thiểu là 6 kí tự .'
-                     }])
-                     invalids++
+                        }])
+                        invalids++
                     }
 
                     break;
-                    case 'phone':
-                        console.log(typeof + item[1] )
-                        if(typeof +item[1] ){
-                            setInvalidFields(prev => [...prev, {
-                                name: item[0],
-                                message: 'Số điện thoại không hợp lệ .'
-                         }])
-                         invalids++
-                        }
-                        break
+                case 'phone':
+                    if (!+item[1]) {
+                        setInvalidFields(prev => [...prev, {
+                            name: item[0],
+                            message: 'Số điện thoại không hợp lệ.'
+                        }])
+                        invalids++
+                    }
+                    break
                 default:
                     break;
             }
@@ -77,9 +79,9 @@ const Login = () => {
             <div className="bg-white w-[600px] p-[30px] pb-[100px] rounded-md shadow-sm">
                 <h3 className="text-2xl font-semibold mb-3">{isRegister ? 'Đăng kí tài khoản ' : 'Đăng nhập'}</h3>
                 <div className="w-full flex flex-col gap-5 ">
-                    {isRegister && <InputForm invalidFields={invalidFields} label={'HỌ TÊN'} value={payload.name} setValue={setPayload} type={'name'} />}
-                    <InputForm invalidFields={invalidFields} label={'SỐ ĐIỆN THOẠI'} value={payload.phone} setValue={setPayload} type={'phone'} />
-                    <InputForm invalidFields={invalidFields} label={'Mật Khẩu'} value={payload.password} setValue={setPayload} type={'password'} />
+                    {isRegister && <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'HỌ TÊN'} value={payload.name} setValue={setPayload} type={'name'} />}
+                    <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'SỐ ĐIỆN THOẠI'} value={payload.phone} setValue={setPayload} type={'phone'} />
+                    <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'Mật Khẩu'} value={payload.password} setValue={setPayload} type={'password'} />
                     <Button
                         text={isRegister ? 'Đăng ký' : 'Đăng nhập'}
                         bgColor='bg-secondary1'
@@ -92,7 +94,14 @@ const Login = () => {
                 <div className="mt-7 flex items-center justify-between">
                     {isRegister
                         ? <small>Bạn đã có tài khoản ? <span
-                            onClick={() => { setIsRegister(false) }}
+                            onClick={() => {
+                                setIsRegister(false)
+                                setPayload({
+                                    phone: '',
+                                    password: '',
+                                    name: ''
+                                })
+                            }}
                             className="text-blue-500 hover:underline"
                         >
                             Đăng nhập ngay
@@ -100,10 +109,18 @@ const Login = () => {
                         : <>
                             <small className="text-[blue] hover:text-[red] ursor-pointer">Bạn quên mật khẩu</small>
                             <small
-                                onClick={() => { setIsRegister(true) }}
-                                className="text-[blue] hover:text-[red] cursor-pointer"
+                                onClick={() => {
+                                    setIsRegister(true)
+                                    setPayload({
+                                        phone: '',
+                                        password: '',
+                                        name: ''
+                                    })
+                                }}
+                                className='text-[blue] hover:text-[red] cursor-pointer'
                             >
-                                Tạo mật khẩu mới</small>
+                                Tạo tài khoản mới
+                            </small>
                         </>}
                 </div>
 

@@ -4,12 +4,16 @@ import { Button } from "../../components";
 import icons from "../../ultils/icons";
 import { useNavigate, Link } from 'react-router-dom'
 import { path } from "../../ultils/constant";
+import {useSelector, useDispatch} from 'react-redux'
+import * as actions from '../../store/actions'
 
 
 const { AiOutlinePlusCircle } = icons
 
 const Header = () =>{
   const navigate = useNavigate() 
+  const dispath = useDispatch()
+  const {isLoggedIn} = useSelector(state => state.auth)
   const goLogin = useCallback((flag) => {
     navigate(path.LOGIN, {state: {flag} })
   },[])
@@ -27,7 +31,7 @@ const Header = () =>{
      
            </Link>
         <div className='flex items-center gap-1'>
-            {<div className='flex items-center gap-1'>
+            {!isLoggedIn && <div className='flex items-center gap-1'>
                 <small>Phongtro123.com xin chào !</small>
                 <Button
                     text={'Đăng nhập'}
@@ -41,6 +45,17 @@ const Header = () =>{
                     bgColor='bg-[#3961fb]'
                     onClick={() => goLogin(true)}
                 />
+            </div>}
+            {isLoggedIn && <div className='flex items-center gap-1'>
+                <small>Tên !</small>
+                <Button
+                    text={'Đăng xuất'}
+                    textColor='text-white'
+                    bgColor='bg-red-700'
+                    onClick={() => dispath(actions.logout())}
+                   
+                />
+               
             </div>}
               <Button
                         text={'Đăng tin mới'}
