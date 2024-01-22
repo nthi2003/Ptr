@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
-import logo from '../../assest/logo.png'
+import logo from '../../assests/logo.png'
 import { Button } from "../../components";
 import icons from "../../ultils/icons";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { path } from "../../ultils/constant";
 
 
@@ -10,20 +10,22 @@ const { AiOutlinePlusCircle } = icons
 
 const Header = () =>{
   const navigate = useNavigate() 
-  const goLogin = useCallback(() => {
-    navigate(path.LOGIN)
+  const goLogin = useCallback((flag) => {
+    navigate(path.LOGIN, {state: {flag} })
   },[])
 
   return (
     
     <div className='w-full flex items-center justify-between'>
         
-            <img
+           <Link to={'/'}>
+           <img
                 src={logo}
                 alt="logo"
                 className='w-[240px] h-[70px] object-contain'
             />
      
+           </Link>
         <div className='flex items-center gap-1'>
             {<div className='flex items-center gap-1'>
                 <small>Phongtro123.com xin chào !</small>
@@ -31,13 +33,13 @@ const Header = () =>{
                     text={'Đăng nhập'}
                     textColor='text-white'
                     bgColor='bg-[#3961fb]'
-                    onClick={goLogin}
+                    onClick={() => goLogin(false)}
                 />
                 <Button
                     text={'Đăng ký'}
                     textColor='text-white'
                     bgColor='bg-[#3961fb]'
-                    onClick={goLogin}
+                    onClick={() => goLogin(true)}
                 />
             </div>}
               <Button
