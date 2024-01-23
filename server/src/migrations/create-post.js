@@ -11,9 +11,7 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
-      password: {
-        type: Sequelize.STRING
-      },
+      
       star: {
         type: Sequelize.STRING,
         defaultValue: '0'
