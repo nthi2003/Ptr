@@ -4,12 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import * as actions from "../../store/actions"
 
 import { useDispatch, useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
 
 const Login = () => {
     const location = useLocation()
     const dispath = useDispatch()
     const navigate = useNavigate()
-    const { isLoggedIn } = useSelector(state => state.auth)
+    const { isLoggedIn, msg, update } = useSelector(state => state.auth)
     const [isRegister, setIsRegister] = useState(location.state?.flag)
     const [invalidFields, setInvalidFields] = useState([])
     const [payload, setPayload] = useState({
@@ -23,6 +24,10 @@ const Login = () => {
     useEffect(() => {
         isLoggedIn && navigate('/')
     }, [isLoggedIn])
+
+    useEffect(() => {
+      msg && Swal.fire('Oops !' , msg, 'error')
+    }, [msg, update])
     
     const handleSubmit = async () => {
         let finalPayload = isRegister ? payload : {
@@ -79,9 +84,9 @@ const Login = () => {
             <div className="bg-white w-[600px] p-[30px] pb-[100px] rounded-md shadow-sm">
                 <h3 className="text-2xl font-semibold mb-3">{isRegister ? 'Đăng kí tài khoản ' : 'Đăng nhập'}</h3>
                 <div className="w-full flex flex-col gap-5 ">
-                    {isRegister && <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'HỌ TÊN'} value={payload.name} setValue={setPayload} type={'name'} />}
-                    <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'SỐ ĐIỆN THOẠI'} value={payload.phone} setValue={setPayload} type={'phone'} />
-                    <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'Mật Khẩu'} value={payload.password} setValue={setPayload} type={'password'} />
+                    {isRegister && <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'HỌ TÊN'} value={payload.name} setValue={setPayload}  keyPayload={'name'} />}
+                    <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'SỐ ĐIỆN THOẠI'} value={payload.phone} setValue={setPayload}  keyPayload={'phone'} />
+                    <InputForm setInvalidFields={setInvalidFields} invalidFields={invalidFields} label={'Mật Khẩu'} value={payload.password} setValue={setPayload}  keyPayload={'password'} type='password' />
                     <Button
                         text={isRegister ? 'Đăng ký' : 'Đăng nhập'}
                         bgColor='bg-secondary1'
