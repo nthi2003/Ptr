@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const Home = () =>
 {
     return (
-             <div className="w-full flex gap-6 flex-col items-center h-full">
+             <div className="w-full flex gap-6 flex-col items-center ">
                 <Header/>
                 <Navigation/>
                 <Search/>
