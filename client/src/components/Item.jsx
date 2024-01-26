@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import icons from '../ultils/icons'
 
 const images = [
@@ -11,13 +11,22 @@ const images = [
 const { GrStar, RiHeartFill, RiHeartLine, BsBookmarkStarFill } = icons
 
 const Item = () => {
+const [isHoverheart, setIsHoverHeart] = useState(false)
   return (
     <div className='w-full flex border-t border-orange-600 p-4 '>
-      <div className='w-2/5 flex flex-wrap gap-[2px] items-center '>
+      <div className='w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer '>
         <img src={images[0]} alt="preview" className='w-[47%] h-[120px] object-cover' />
         <img src={images[1]} alt="preview" className='w-[47%] h-[120px] object-cover' />
         <img src={images[2]} alt="preview" className='w-[47%] h-[120px] object-cover' />
         <img src={images[3]} alt="preview" className='w-[47%] h-[120px] object-cover' />
+        <span className='bg-overlay-70 text-white px-2 rounded-md absolute left-1 bottom-1'>4 ảnh</span>
+        <span 
+           className='text-white absolute right-5 bottom-1'
+           onMouseEnter={() => setIsHoverHeart(true)}
+           onMouseLeave={() => setIsHoverHeart(false) } 
+        >
+            {isHoverheart ? <RiHeartFill size={26} color='red' /> : <RiHeartFill size={26}/>}
+        </span>
       </div>
       <div className='w-3/5'>
         <div className='flex justify-between gap-4 w-full'>
