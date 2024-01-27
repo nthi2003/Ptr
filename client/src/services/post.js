@@ -13,12 +13,12 @@ export const apiGetPosts = () => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
-export const apiGetPostsLimit = (query) => new Promise(async (resolve, reject) => {
+export const apiGetPostsLimit = (page) => new Promise(async (resolve, reject) => {
     try {
         const response = await axiosConfig({
             method: 'get',
-            url: `/api/v1/post/limit`,
-            params: query
+            url: `/api/v1/post/limit?page=${page}`,
+            
         })
         resolve(response)
 
@@ -50,4 +50,4 @@ export const apiUploadImages = (images) => new Promise(async (resolve, reject) =
     } catch (error) {
         reject(error)
     }
-})
+})          
