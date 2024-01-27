@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Button, Item } from '../../components'
 import { getPosts, getPostsLimit } from '../../store/actions/post'
 import { useDispatch, useSelector } from 'react-redux'
+import Pagination from './Pagination'
 
 
 const List = () => {
@@ -40,6 +41,7 @@ const List = () => {
                     )
                 })}
             </div>
+            
         </div>
     )
 }
