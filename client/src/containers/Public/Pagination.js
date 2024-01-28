@@ -5,19 +5,19 @@ import icons from '../../ultils/icons'
 
 
 const { GrLinkNext, GrLinkPrevious } = icons
-const arrNumber = [1, 2, 3]
 
-const Pagination = ({ number }) => {
+
+const Pagination = ({ page }) => {
     const { count, posts } = useSelector(state => state.post);
     const [arrPage, setarrPage] = useState([])
-    const [currentPage, setCurrentPage] = useState(+number)
+    const [currentPage, setCurrentPage] = useState(+page || 1   )
     const [isHideEnd, setIsHideEnd] = useState(false)
     const [isHideStart, setIsHideStart] = useState(false)
 
     useEffect(() => {
         let maxPage = Math.floor(count / posts.length)
-        console.log('maxPage', maxPage)
         let end = (currentPage + 1) > maxPage ? maxPage : (currentPage + 1)
+        console.log(end)
         let start = (currentPage - 1) <= 0 ? 1 : (currentPage - 1)
         let temp = []
         for (let i = start; i <= end; i++) temp.push(i)
@@ -26,7 +26,6 @@ const Pagination = ({ number }) => {
         currentPage <= 2  ? setIsHideStart(true) : setIsHideStart(false)
 
     }, [count, posts, currentPage])
-    console.log(arrPage)
     return (
         <div className='flex items-center justify-center gap-2 py-5'>
             {!isHideStart && <PageNumber icon={<GrLinkPrevious />} setCurrentPage={setCurrentPage} text={1}/>}
@@ -41,8 +40,8 @@ const Pagination = ({ number }) => {
                     />
                 )
             })}
-            {!isHideEnd && <PageNumber text={'...'} />}
-            {!isHideEnd && <PageNumber icon={<GrLinkNext />} setCurrentPage={setCurrentPage} currentPage={Math.floor(count / posts.length)} />}
+             {!isHideEnd && <PageNumber text={'...'} />}
+            {!isHideEnd && <PageNumber icon={<GrLinkNext />} setCurrentPage={setCurrentPage} text={Math.floor(count / posts.length)} />}
         </div>
     );
 };

@@ -1,14 +1,24 @@
 import React, { memo, useState } from 'react'
 import icons from '../ultils/icons'
+import {useNavigate, Link} from 'react-router-dom'
+import { formatVietnameseToString } from '../ultils/Common/formatVietnameseToString'
 
 const indexs = [0, 1, 2, 3]
 const { GrStar, RiHeartFill, RiHeartLine, BsBookmarkStarFill } = icons
 
 
-const Item = ({ images, user, title, star, description, attributes, address }) => {
+const Item = ({ images, user, title, star, description, attributes, address, id }) => {
   const [isHoverheart, setIsHoverHeart] = useState(false)
+  const navigate = useNavigate()
+  const handleStar = (star) => {
+     let stars = []
+     for(let i=1; i<+star; i++) stars.push(<GrStar className='star-item' size={18} color='yellow ' />)
+     return stars
+  }
+  console.log(handleStar(5))
   return (
-    <div className='w-full flex border-t border-orange-600 p-4 '>
+    <Link 
+         to={`chi-tiet/${formatVietnameseToString(title)}/${id}`} className='w-full flex border-t border-orange-600 p-4 '>
       <div className='w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer'>
         {images.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
           return (
@@ -28,11 +38,11 @@ const Item = ({ images, user, title, star, description, attributes, address }) =
         <div className='flex justify-between gap-4 w-full'>
           <div className='flex items-start'>
             <div className=' text-red-600 font-medium'>
-              <GrStar className='star-item' size={18} color='yellow ' />
-              <GrStar className='star-item' size={18} color='yellow ' />
-              <GrStar className='star-item' size={18} color='yellow ' />
-              <GrStar className='star-item' size={18} color='yellow ' />
-              <GrStar className='star-item' size={18} color='yellow ' />
+              {handleStar(+star).length > 0 && handleStar(+star).map((star, number)  => {
+                 return(
+                  <span key={number}>{star}</span>
+                 )
+              })}
               {title}
             </div>
 
@@ -62,7 +72,7 @@ const Item = ({ images, user, title, star, description, attributes, address }) =
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
