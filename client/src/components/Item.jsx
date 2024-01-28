@@ -15,7 +15,6 @@ const Item = ({ images, user, title, star, description, attributes, address, id 
      for(let i=1; i<+star; i++) stars.push(<GrStar className='star-item' size={18} color='yellow ' />)
      return stars
   }
-  console.log(handleStar(5))
   return (
     <Link 
          to={`chi-tiet/${formatVietnameseToString(title)}/${id}`} className='w-full flex border-t border-orange-600 p-4 '>

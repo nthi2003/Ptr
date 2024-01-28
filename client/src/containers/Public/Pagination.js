@@ -17,7 +17,6 @@ const Pagination = ({ page }) => {
     useEffect(() => {
         let maxPage = Math.floor(count / posts.length)
         let end = (currentPage + 1) > maxPage ? maxPage : (currentPage + 1)
-        console.log(end)
         let start = (currentPage - 1) <= 0 ? 1 : (currentPage - 1)
         let temp = []
         for (let i = start; i <= end; i++) temp.push(i)
