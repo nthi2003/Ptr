@@ -3,6 +3,12 @@ require('dotenv').config()
 import cors from 'cors'
 import initRoutes from './src/routes'
 import connectDatabase from './src/config/connectDatabase'
+import { dataArea } from './src/ultis/data'
+import { getNumberFromString } from './src/ultis/common'
+
+console.log(getNumberFromString('4.1 triệu/tháng'));
+
+console.log(dataArea)
 const app = express()
 app.use(cors({
     origin: process.env.CLIENT_URL,
