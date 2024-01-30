@@ -10,7 +10,7 @@ import { dataPrice, dataArea } from '../ultis/data'
 import { getNumberFromString } from '../ultis/common'
 
 require('dotenv').config()
-const dataBody = chothuephongtro.body
+const dataBody = nhachothue.body
 const hashPassword = password => bcrypt.hashSync(password, bcrypt.genSaltSync(12))
 
 export const insertService = () => new Promise(async (resolve, reject) => {
@@ -37,7 +37,7 @@ export const insertService = () => new Promise(async (resolve, reject) => {
                 overviewId,
                 imagesId,
                 areaCode: dataArea.find(area => area.max > currentArea && area.min <= currentArea)?.code,
-                    priceCode: dataPrice.find(area => area.max > currentPrice && area.min <= currentPrice)?.code,
+                priceCode: dataPrice.find(area => area.max > currentPrice && area.min <= currentPrice)?.code,
 
 
             })
@@ -83,5 +83,26 @@ export const insertService = () => new Promise(async (resolve, reject) => {
 
     } catch (error){
         reject(error)
+    }
+})
+export const createPricesAndAreas = () => new Promise((resolve, reject) => {
+    try {
+        dataPrice.forEach(async (item, index) => {
+            await db.Price.create({
+                code: item.code,
+                value: item.value,
+                order: index + 1
+            })
+        })
+        dataArea.forEach(async (item, index) => {
+            await db.Area.create({
+                code: item.code,
+                value: item.value,
+                order: index + 1
+            })
+        })
+        resolve('OK')
+    } catch (err) {
+        reject(err)
     }
 })

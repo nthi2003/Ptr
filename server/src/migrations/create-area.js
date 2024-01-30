@@ -8,8 +8,11 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 autoIncrement: true
             },
+            order: {
+                type: Sequelize.STRING
+            },
             code: {
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             value: {
                 type: Sequelize.STRING
