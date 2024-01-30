@@ -8,10 +8,11 @@ import * as action from '../../store/actions'
 
 const Homepage = () => {
   const [params] = useSearchParams()
-  const { categories, prices } = useSelector(state => state.app)
+  const { categories, prices , areas } = useSelector(state => state.app)
   const dispatch = useDispatch()
   useEffect(() => {
      dispatch(action.getPrices())
+     dispatch(action.getAreas())
   }, [])
   console.log(prices)
   return (
@@ -31,7 +32,7 @@ const Homepage = () => {
                 <div className='w-[30%] flex flex-col gap-4 justify-start items-center flex flex-col gap-4 justify-start items-center'>
                     <ItemSidebar content={categories} title='Danh sách cho thuê' />
                     <ItemSidebar isDouble={true} content={prices} title='Xem theo giá'/>
-                    <ItemSidebar title='Xem theo diện tích'/>
+                    <ItemSidebar isDouble={true} content={areas} title='Xem theo diện tích'/>
                 </div>
             </div>
 
