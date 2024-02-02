@@ -8,13 +8,13 @@ import * as action from '../../store/actions'
 
 const Homepage = () => {
   const [params] = useSearchParams()
+  console.log(params)
   const { categories, prices , areas } = useSelector(state => state.app)
   const dispatch = useDispatch()
   useEffect(() => {
      dispatch(action.getPrices())
      dispatch(action.getAreas())
   }, [])
-  console.log(prices)
   return (
 <div className='w-full flex flex-col gap-3' >
             <div>
@@ -24,7 +24,7 @@ const Homepage = () => {
             <Province />
             <div className='w-full flex gap-4'>
                 <div className='w-[70%]'>
-                    <List page={params.get('page')}/>
+                    <List />
                     <Pagination page={params.get('page')}/>
                      <div className='h-[500px]'></div>
                    

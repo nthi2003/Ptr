@@ -14,7 +14,6 @@ const ItemSidebar = ({ title, content, isDouble, type }) => {
     const dispatch = useDispatch()
     const location = useLocation()
     const navigate = useNavigate()
-    console.log(location)
     const formatContent = () => {
         const oddEl = content?.filter((item, index) => index % 2 !== 0)
         const evenEl = content?.filter((item, index) => index % 2 == 0)
@@ -27,13 +26,13 @@ const ItemSidebar = ({ title, content, isDouble, type }) => {
         return formatContent
     }
     const handleFilterPosts = (code) => {
-        dispatch(actions.getPostsLimit({ [type]: code }))
-            navigate({
-        pathname: location.pathname,
-        search: createSearchParams({
-            page: code
-        }).toString()
-    });
+
+        navigate({
+            pathname: location.pathname,
+            search: createSearchParams({
+                'priceCode': code
+            }).toString()
+        });
     }
     return (
         <div className='p-4 rounded-md bg-white w-full'>

@@ -6,7 +6,6 @@ import { path } from "./ultils/constant";const App = () => {
       <Routes>
         <Route path={path.HOME} element={<Home />} >
         <Route path='*' element={<Homepage />} /> 
-        <Route path={path.HOME__PAGE} element={<Homepage />} /> 
         <Route path={path.LOGIN} element={<Login />} />
         <Route path={path.CHO_THUE_CAN_HO} element={<RentalApartmant />} />
         <Route path={path.CHO_THUE_MAT_BANG} element={<RentalSpace />} />

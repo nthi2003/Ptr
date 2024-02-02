@@ -26,11 +26,14 @@ export const getPostsService = () => new Promise(async (resolve, reject) => {
 })
 export const getPostsLimitService = (page, query) => new Promise(async (resolve, reject) => {
     try {
+        let offset = (!page || +page <= 1) ? 0 : (+page - 1)
+        console.log(offset)
+        console.log(query)
         const response = await db.Post.findAndCountAll({
             where: query,
             raw: true,
             nest: true,
-            offset: page * (+process.env.LIMIT) || 0,
+            offset: offset * +process.env.LIMIT,
             limit: +process.env.LIMIT,
             include: [
                 { model: db.Image, as: 'images', attributes: ['image'] },
