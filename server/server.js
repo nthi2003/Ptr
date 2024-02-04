@@ -5,7 +5,7 @@ import initRoutes from './src/routes'
 import connectDatabase from './src/config/connectDatabase'
 import { dataArea } from './src/ultis/data'
 import { getNumberFromString } from './src/ultis/common'
-
+console.log(getNumberFromString('2 triệu/tháng'))
 
 const app = express()
 app.use(cors({

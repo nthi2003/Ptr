@@ -19,7 +19,7 @@ const List = () => {
         let searchParamsObject = {}
         params?.map(i => { searchParamsObject = { ...searchParamsObject, [i[0]] : i[1] }})
         console.log(searchParamsObject)
-        dispatch(getPostsLimit({searchParamsObject}))
+        dispatch(getPostsLimit(searchParamsObject))
     },[searchParams])
     return (
         <div className='w-full p-2 bg-white shadow-md rounded-md px-6'>
