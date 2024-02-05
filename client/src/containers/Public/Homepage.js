@@ -26,7 +26,7 @@ const Homepage = () => {
                 <div className='w-[70%]'>
                     <List />
                     <Pagination page={params.get('page')}/>
-                     <div className='h-[500px]'></div>
+                
                    
                 </div>
                 <div className='w-[30%] flex flex-col gap-4 justify-start items-center flex flex-col gap-4 justify-start items-center'>
