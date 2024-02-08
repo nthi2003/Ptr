@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     Area.init({
         code: DataTypes.STRING,
         order: DataTypes.INTEGER,
-        value: DataTypes.STRING
+        value: DataTypes.STRING,
     }, {
         sequelize,
         modelName: 'Area',
