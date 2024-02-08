@@ -1,20 +1,15 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { text } from '../../ultils/constant'
 import {Province, ItemSidebar, RelatedPost} from '../../components'
 import { List, Pagination} from './index'
 import { useSearchParams } from 'react-router-dom'
 import { useSelector, useDispatch} from 'react-redux'
-import * as action from '../../store/actions'
+import * as actions from '../../store/actions'
 
 const Homepage = () => {
-  const [params] = useSearchParams()
-  console.log(params)
   const { categories, prices , areas } = useSelector(state => state.app)
   const dispatch = useDispatch()
-  useEffect(() => {
-     dispatch(action.getPrices())
-     dispatch(action.getAreas())
-  }, [])
+
   return (
 <div className='w-full flex flex-col gap-3' >
             <div>
@@ -25,7 +20,7 @@ const Homepage = () => {
             <div className='w-full flex gap-4'>
                 <div className='w-[70%]'>
                     <List />
-                    <Pagination page={params.get('page')}/>
+                    <Pagination/>
                 
                    
                 </div>

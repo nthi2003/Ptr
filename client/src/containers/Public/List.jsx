@@ -6,7 +6,8 @@ import { useSearchParams } from 'react-router-dom'
 
 
 
-const List = () => {
+const List = ({categoryCode}) => {
+    console.log(categoryCode)
     const dispatch = useDispatch()
     const [searchParams] = useSearchParams()
     const { posts } = useSelector(state => state.post)
@@ -18,9 +19,10 @@ const List = () => {
         }
         let searchParamsObject = {}
         params?.map(i => { searchParamsObject = { ...searchParamsObject, [i[0]] : i[1] }})
+        if(categoryCode) searchParamsObject.categoryCode = categoryCode
         console.log(searchParamsObject)
         dispatch(getPostsLimit(searchParamsObject))
-    },[searchParams])
+    },[searchParams, categoryCode])
     return (
         <div className='w-full p-2 bg-white shadow-md rounded-md px-6 h-100px'>
             <div className='flex items-center justify-between my-3'>
