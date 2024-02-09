@@ -8,6 +8,4 @@ router.get('/limit', postController.getPostsLimit)
 router.get('/new-post', postController.getNewPosts)
 
 
-
-
 export default router
