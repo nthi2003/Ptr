@@ -32,7 +32,7 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
         const stackEl = document.getElementById('track')
         const stackRect = stackEl.getBoundingClientRect()
         console.log(e)
-        let percent = value ? value : Math.round((e.clientX - stackRect.left) * 100 / stackRect.width, 0)
+        let percent = value ? value : Math.round((e.clientX - stackRect.left) * 100 / stackRect.width, 0) // kiem tra thang nap gan hon thi chay ts
         if (Math.abs(percent - persent1) <= (Math.abs(percent - persent2))) {
             setPersent1(percent)
         } else {
