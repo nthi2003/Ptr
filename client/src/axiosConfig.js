@@ -1,29 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_SERVER_URL
 })
 
-// Thêm một bộ đón chặn request
+// Add a request interceptor
 instance.interceptors.request.use(function (config) {
-    // Làm gì đó trước khi request dược gửi đi
+    // Do something before request is sent
+    // gắn token vào header
+    let token = window.localStorage.getItem('persist:auth') && JSON.parse(window.localStorage.getItem('persist:auth'))?.token?.slice(1, -1)
+    console.log(window.localStorage.getItem('persist:auth'));
+    config.headers = {
+        authorization: token ? `Bearer ${token}` : null
+    }
     return config;
-  }, function (error) {
-
+}, function (error) {
     return Promise.reject(error);
-  });
+});
 
-// Thêm một bộ đón chặn response
+// Add a response interceptor
 instance.interceptors.response.use(function (response) {
-    // Bất kì mã trạng thái nào nằm trong tầm 2xx đều khiến hàm này được trigger
-    // Làm gì đó với dữ liệu response
+    // refresh token
     return response;
-  }, function (error) {
-    // Bất kì mã trạng thái nào lọt ra ngoài tầm 2xx đều khiến hàm này được trigger\
-    // Làm gì đó với lỗi response
+}, function (error) {
     return Promise.reject(error);
-  });
-
+});
 
 
 export default instance
