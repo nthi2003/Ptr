@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import logo from '../../assests/logo.png'
-import { Button } from "../../components";
+import { Button, User } from "../../components";
 import icons from "../../ultils/icons";
 import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { path } from "../../ultils/constant";
 import {useSelector, useDispatch} from 'react-redux'
 import * as actions from '../../store/actions'
 import menuManage from "../../ultils/menuManage";
-import { AiOutlineLogout } from 'react-icons/ai'
 
 
-const { AiOutlinePlusCircle } = icons
+
+const { AiOutlinePlusCircle ,AiOutlineLogout , BsChevronDown } = icons
 
 const Header = () =>{
   const navigate = useNavigate() 
@@ -57,12 +57,13 @@ const Header = () =>{
              />
          </div>}
          {isLoggedIn && <div className='flex items-center gap-1 relative'>
-             <small>{currentData.name}</small>
+             <User/>
              <Button
                  text={'Quản lí tài khoản'}
                  textColor='text-white'
                  bgColor='bg-blue-700'
                  px='px-4'
+                 IcAfter={BsChevronDown}
                  onClick={() => setIsShowMenu(prev => !prev)}
              />
              {isShowMenu && <div className="absolute min-w-200 shadow-md rounded-md bg-white top-full p-4 right-0 flex flex-col">
