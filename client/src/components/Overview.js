@@ -1,11 +1,11 @@
 import React from 'react'
 
-const CreatePost = () => {
+const Overview = () => {
   return (
     <div>
-      ddasda
+      o
     </div>
   )
 }
 
-export default CreatePost
+export default Overview
