@@ -56,6 +56,7 @@ export const apiGetPublicProvinces = () => new Promise(async (resolve, reject) =
             url: `https://vapi.vnappmob.com/api/province/district/${provinceId}`
         })
         resolve(response)
+      
     } catch (error) {
         reject(error)
     }
