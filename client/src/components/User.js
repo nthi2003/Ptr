@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import anonAvatar from '../assests/anon-avatar.png'
+import anonAvatar from '../assets/anon-avatar.png'
 
 const User = () => {
     const { currentData } = useSelector(state => state.user)

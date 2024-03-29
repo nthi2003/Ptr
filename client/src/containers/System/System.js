@@ -4,11 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { path } from '../../ultils/constant'
 import { Header, Sidebar } from './'
 
-
 const System = () => {
     const { isLoggedIn } = useSelector(state => state.auth)
 
-    if (!isLoggedIn) return <Navigate to={`/${path.LOGIN}`} replace={true} /> //replace xoa lich su lui trang
+    if (!isLoggedIn) return <Navigate to={`/${path.LOGIN}`} replace={true} />
     return (
         <div className='w-full h-screen flex flex-col items-center'>
             <Header />
@@ -17,7 +16,6 @@ const System = () => {
                 <div className='flex-auto bg-white shadow-md h-full p-4'>
                     <Outlet />
                 </div>
-                
             </div>
         </div>
     )
