@@ -4,9 +4,9 @@ import { apiUploadImages } from '../../services'
 import icons from '../../ultils/icons'
 import { getCodes, getCodesArea } from '../../ultils/Common/getCodes'
 import { useSelector } from 'react-redux'
-
+import { apiCreatePost } from '../../services'
+import Swal from 'sweetalert2';
 const { BsCameraFill, ImBin } = icons
-
 const CreatePost = () => {
     const [payload, setPayload] = useState({
         categoryCode: '',
@@ -50,7 +50,7 @@ const CreatePost = () => {
         }))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
         let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10,6), prices, 1, 15)
         let areaCodeArr = getCodesArea(+payload.areaNumber, areas, 0, 90)
     
@@ -70,7 +70,28 @@ const CreatePost = () => {
             label: `${categories?.find(item => item.code === payload?.categoryCode)?.value} ${payload?.address?.split(',') [0]}`
 
         }
-        console.log(finalPayLoad)
+
+        const response = await apiCreatePost (finalPayLoad)
+        if (response?.data.err === 0) {
+            Swal.fire('Thành Công', 'Đã thêm bài đăng', 'success').then(() => {
+                setPayload({
+                    categoryCode: '',
+                    title: '',
+                    priceNumber: 0,
+                    areaNumber: 0,
+                    images: '',
+                    address: '',
+                    priceCode: '',
+                    areaCode: '',
+                    description: '',
+                    target: '',
+                    province: ''
+                })
+            })
+        }
+        else{
+            Swal.fire('Oops', 'Lỗi', 'error')
+        }
     }
 
     return (
