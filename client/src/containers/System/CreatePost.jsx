@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux'
 const { BsCameraFill, ImBin } = icons
 
 const CreatePost = () => {
-
     const [payload, setPayload] = useState({
         categoryCode: '',
         title: '',
@@ -42,6 +41,7 @@ const CreatePost = () => {
         setImagesPreview(prev => [...prev, ...images])
         setPayload(prev => ({ ...prev, images: [...prev.images, ...images] }))
     }
+
     const handleDeleteImage = (image) => {
         setImagesPreview(prev => prev?.filter(item => item !== image))
         setPayload(prev => ({
@@ -49,12 +49,23 @@ const CreatePost = () => {
             images: prev.images?.filter(item => item !== image)
         }))
     }
-    const handleSubmit = () => {
-        let priceCodeArr = getCodes([+payload.priceNumber, +payload.priceNumber], prices)
-        console.log(priceCodeArr)
-        let priceCode = priceCodeArr[priceCodeArr.length - 1]?.code
 
-        console.log(priceCode)
+    const handleSubmit = () => {
+        let priceCodeArr = getCodes(+payload.priceNumber, prices, 1, 15)
+        let areaCodeArr = getCodesArea(+payload.areaNumber, areas, 0, 90)
+    
+        // Extracting codes
+        let priceCode = priceCodeArr[0]?.code
+        let areaCode = areaCodeArr[0]?.code
+        
+        console.log({priceCode, areaCode})
+
+        let finalPayLoad = {
+            ...payload,
+            priceCode,
+            areaCode
+        }
+        console.log(finalPayLoad)
     }
 
     return (
@@ -99,9 +110,7 @@ const CreatePost = () => {
                         </div>
                     </div>
                     <Button onClick={handleSubmit} text='Tạo mới' bgColor='bg-green-600' textColor='text-white' />
-                    <div className='h-[500px]'>
-
-                    </div>
+                    <div className='h-[500px]'></div>
                 </div>
                 <div className='w-[30%] flex-none'>
                     maps
