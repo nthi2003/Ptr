@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 import {v4 as generateId} from 'uuid'
 import generateCode from '../ultis/generateCode'
 import moment from 'moment'
+import generateDate from '../ultis/generateData';
 export const getPostsService = () => new Promise(async (resolve, reject) => {
     try {
         const response = await db.Post.findAll({
@@ -92,7 +93,7 @@ export const createNewPostService = (body , userId) => new Promise(async (resolv
         const overviewId = generateId();
         const labelCode = generateCode(body.label);
         const hashtag = `#${Math.floor(Math.random() * Math.pow(10,6))}`;
-        const currentDate = moment().toDate();
+        const currentDate = generateDate();
         
         await db.Post.create({
             id: generateId(),
@@ -132,8 +133,8 @@ export const createNewPostService = (body , userId) => new Promise(async (resolv
             type: body?.category,
             target: body?.target,
             bonus: 'Tin thường',
-            created: currentDate,
-            expired: moment(currentDate).add(10, 'days').toDate(),
+            created: currentDate.today,
+            expired: currentDate.expireDay,
         });
 
         await db.Province.findOrCreate({ 
