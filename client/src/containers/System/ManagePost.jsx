@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions';
 import moment from 'moment';
-import 'moment/locale/vi'
+import { Button } from '../../components'
 const ManagePost = () => {
   const dispatch = useDispatch(); // Corrected dispatch spelling
   const { postOfCurrent } = useSelector(state => state.post);
@@ -11,13 +11,8 @@ const ManagePost = () => {
     dispatch(actions.getPostsLimitAdmin()); // Corrected dispatch spelling
   }, []);
 
-  const checkStatus = (datetime) => {
-    let todayInSeconds = new Date().getTime();
-    let expireDayInSeconds = datetime.getTime();
-
-    return todayInSeconds <= expireDayInSeconds ? 'Đang hoạt động' : 'Đã hết hạn';
-  }
-
+  const checkStatus = (dateString) =>  moment(dateString , process.env.REACT_APP_FORMAT_DATE).isAfter(new Date().toDateString())
+  console.log(checkStatus('8/10/2023'))
   return (
     <div className='flex flex-col gap-6'>
       <div className='py-4 border-b border-gray-200 flex items-center justify-between'>
@@ -28,14 +23,15 @@ const ManagePost = () => {
       </div>
       <table className="w-full table-auto">
         <thead>
-          <tr>
-            <th className='border p-2'>Mã tin</th>
-            <th className='border p-2'>Ảnh đại diện</th>
-            <th className='border p-2'>Tiêu đề</th>
-            <th className='border p-2'>Giá</th>
-            <th className='border p-2'>Ngày bắt đầu</th>
-            <th className='border p-2'>Ngày hết hạn</th>
-            <th className='border p-2'>Trạng thái</th>
+          <tr className='flex w-full bg-blue-100'>
+            <th className='border p-2 flex-1'>Mã tin</th>
+            <th className='border p-2 flex-1'>Ảnh đại diện</th>
+            <th className='border p-2 flex-1'>Tiêu đề</th>
+            <th className='border p-2 flex-1'>Giá</th>
+            <th className='border p-2 flex-1'>Ngày bắt đầu</th>
+            <th className='border p-2 flex-1'>Ngày hết hạn</th>
+            <th className='border p-2 flex-1'>Trạng thái</th>
+            <th className='border p-2 flex-1'>Tùy chọn</th>
           </tr>
         </thead>
         <tbody>
@@ -44,16 +40,30 @@ const ManagePost = () => {
           </tr>
             : postOfCurrent?.map(item => {
               return (
-                <tr>
-                  <td className='border text-center p-2'>{item?.overviews?.code}</td>
-                  <td className='border flex items-center justify-center p-2'>
+                <tr className='h-16 items-center flex' key={item.id}>
+                  <td className='border px-2 whitespace-nowrap overflow-hidden text-ellipsis h-full flex-1 text-center items-center flex justify-center'>{item?.overviews?.code}</td>
+                  <td className='border px-2 whitespace-nowrap overflow-hidden text-ellipsis h-full flex-1 flex items-center  justify-center'>
                     <img src={JSON.parse(item?.images?.image)[0] || ''} alt="avatar" className='w-10 h-10 object-cover rounded-md' />
                   </td>
-                  <td className='border text-center  p-2'>{item?.title}</td>
-                  <td className='border text-center  p-2'>{item?.attributes?.price}</td>
-                  <td className='border text-center  p-2'>{item?.overviews?.created}</td>
-                  <td className='border text-center  p-2'>{item?.overviews?.expired}</td>
-                   <td className='border text-center  p-2'>{checkStatus(new Date(item?.overviews?.expired?.split(' ')[5]))}</td>
+                  <td className=' border px-2 whitespace-nowrap overflow-hidden text-ellipsis flex-1 h-full text-center items-center flex justify-center'>{`${item?.title?.slice(0,20)}...`}</td>
+                  <td className=' border px-2 whitespace-nowrap overflow-hidden text-ellipsis flex-1 h-full text-center items-center flex justify-center'>{item?.attributes?.price}</td>
+                  <td className=' border px-2 whitespace-nowrap overflow-hidden text-ellipsis flex-1 h-full text-center items-center flex justify-center'>{item?.overviews?.created}</td>
+                  <td className=' border px-2 whitespace-nowrap overflow-hidden text-ellipsis flex-1 h-full text-center items-center flex justify-center'>{item?.overviews?.expired}</td>
+                  <td className=' border px-2 whitespace-nowrap overflow-hidden text-ellipsis flex-1 h-full text-center items-center flex justify-center'>{checkStatus(item?.overviews?.expired?.split( ' ' )[5]) ? 'Đang hoạt động' : 'Đã hết hạn'}</td>
+                  <td className=' border px-2 whitespace-nowrap overflow-hidden text-ellipsis flex-1 h-full text-center  flex items-center justify-center gap-4'>
+                    <Button 
+                      text='Sửa'
+                      bgColor='bg-green-600'
+                      textColor='text-white'
+                      
+                    />
+                    <Button 
+                      text='Xóa'
+                      bgColor='bg-orange-600'
+                      textColor='text-white'
+                     
+                    />
+                  </td>
                 </tr>
               )
             })
