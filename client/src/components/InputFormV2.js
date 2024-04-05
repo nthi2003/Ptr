@@ -1,8 +1,7 @@
 import React from 'react'
 
 const InputFormV2 = ({ label, unit, value, setValue, name, small, setInvalidFields , invalidFields  }) => {
-    console.log(name)
-    console.log(invalidFields)
+
     return (
         <div>
             <label htmlFor="title">{label}</label>

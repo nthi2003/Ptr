@@ -1,5 +1,5 @@
 
-import {  apiGetPosts, apiGetPostsLimit, apiGetNewPosts } from '../../services/post'
+import {  apiGetPosts, apiGetPostsLimit, apiGetNewPosts, apiGetPostsLimitAdmin } from '../../services/post'
 
 import actionTypes from "./actionTypes";
 
@@ -69,6 +69,30 @@ export const getNewPosts = () => async (dispatch) => {
         dispatch({
             type: actionTypes.GET_NEW_POST,
             newPosts: null
+        })
+    }
+}
+export const getPostsLimitAdmin = (query) => async (dispatch) => {
+    try {
+        const response = await apiGetPostsLimitAdmin(query)
+        if (response?.data.err === 0) {
+            dispatch({
+                type: actionTypes.GET_POSTS_ADMIN,
+                posts: response.data.response?.rows,
+                count: response.data.response?.count
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_POSTS_ADMIN,
+                msg: response.data.msg,
+                posts: null
+            })
+        }
+
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POSTS_ADMIN,
+            posts: null
         })
     }
 }
