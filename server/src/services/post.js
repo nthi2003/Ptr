@@ -197,3 +197,78 @@ export const getPostsLimitAdminService = (page, id, query) => new Promise(async 
         reject(error)
     }
 })
+export const updatePost = ({ postId, overviewId, imagesId , attributesId ,...payload }) => new Promise(async (resolve, reject) => {
+    try {
+        const labelCode = generateCode(body.label)
+        await db.Post.update({
+           
+            title: body.title || null,
+            labelCode,
+            address: body.address || null,
+  
+            categoryCode: body.categoryCode ,
+            description: JSON.stringify(body.description) || null,
+            areaCode: body.areaCode || null,
+            priceCode: body.priceCode || null,
+            provinceCode: body?.province?.includes('Thành phố') ? generateCode(body?.province?.replace('Thành phố', '')) : generateCode(body?.province?.replace('Tỉnh', '')) || null,
+            priceNumber: body.priceNumber,
+            areaNumber: body.areaNumber,
+        }, {
+            where: {id: postId}
+        });
+
+        await db.Attribute.update({
+
+            price: +body.priceNumber < 1 ? `${body.priceNumber * 1000000} đồng / tháng` : `${body.priceNumber} triệu/tháng`,
+            acreage: `${body.areaNumber} m2`,
+        }, {
+            where: {id : attributesId}
+        });
+
+        await db.Image.update({
+            image: JSON.stringify(body?.images)
+        }, {
+            where: {id : imagesId }
+        });
+
+        await db.Overview.update({
+            area: body.label,
+            type: body?.category,
+            target: body?.target,
+            bonus: 'Tin thường',
+        }, {
+            where: {id: overviewId}
+        });
+
+        await db.Province.findOrCreate({ 
+            where: {
+                [Op.or]: [
+                    { value: body?.province?.includes('Thành phố') ? body.province.replace('Thành phố', '') : null },
+                    { value: body?.province?.includes('Tỉnh') ? body.province.replace('Tỉnh', '') : null }
+                ]
+            },
+            defaults: {
+                code: body?.province?.includes('Thành phố') ? generateCode(body?.province?.replace('Thành phố', '')) : generateCode(body?.province?.replace('Tỉnh', '')),
+                value: body?.province?.includes('Thành phố') ? body.province.replace('Thành phố', '') : body.province.replace('Tỉnh', '')
+            }
+        });
+
+        await db.Label.findOrCreate({ 
+            where: {
+                code: labelCode
+            },
+            defaults: {
+                code: labelCode,
+                value: body.label,
+            }
+        });
+        resolve({
+            err: 0,
+            msg: 'Updated',
+            response
+        })
+
+    } catch (error) {
+        reject(error)
+    }
+})

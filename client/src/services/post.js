@@ -77,3 +77,16 @@ export const apiGetPostsLimitAdmin = (query) => new Promise(async (resolve, reje
         reject(error)
     }
 })
+export const apiUpdatePost = (payload) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'put',
+            url: `/api/v1/post/limit-admin`,
+            data: payload
+        })
+        resolve(response)
+
+    } catch (error) {
+        reject(error)
+    }
+})

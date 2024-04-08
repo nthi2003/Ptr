@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Overview, Address, Loading, Button } from '../../components'
 import { apiUploadImages } from '../../services'
 import icons from '../../ultils/icons'
@@ -16,11 +16,11 @@ const CreatePost = ({isEdit}) => {
         title: dataEdit?.title || '',
         priceNumber: dataEdit?.priceNumber * 1000000 || 0,
         areaNumber: dataEdit?.areaNumber || 0,
-        images: dataEdit?.images || '',
+        images: JSON.parse(dataEdit?.images?.image  ) || '',
         address: dataEdit?.address || '',
         priceCode: dataEdit?.priceCode || '',
         areaCode: dataEdit?.areaCode || '',
-        description: dataEdit?.description || '',
+        description: JSON.parse(dataEdit?.description) || '',
         target: dataEdit?.target || '',
         province: dataEdit?.province || ''
         }
@@ -31,6 +31,15 @@ const CreatePost = ({isEdit}) => {
     const { prices, areas, categories, province } = useSelector(state => state.app)
     const { currentData } = useSelector(state => state.user)
     const [invalidFields, setInvalidFields] = useState([])
+    console.log(dataEdit)
+    useEffect(() => {
+        if (dataEdit) {
+            let images = JSON.parse(dataEdit?.images?.image)
+            images && setImagesPreview(images)
+
+        }
+    }, [dataEdit])
+
     const handleFiles = async (e) => {
         e.stopPropagation()
         setIsLoading(true)
@@ -78,29 +87,35 @@ const CreatePost = ({isEdit}) => {
         }
     
         const result = validate(finalPayLoad, setInvalidFields)
-        console.log(result)
         if (result === 0)  {
-            const response = await apiCreatePost (finalPayLoad)
-            if (response?.data.err === 0) {
-                Swal.fire('Thành Công', 'Đã thêm bài đăng', 'success').then(() => {
-                    setPayload({
-                        categoryCode: '',
-                        title: '',
-                        priceNumber: 0,
-                        areaNumber: 0,
-                        images: '',
-                        address: '',
-                        priceCode: '',
-                        areaCode: '',
-                        description: '',
-                        target: '',
-                        province: ''
-                    })
-                })
-            }
-            else{
-                Swal.fire('Oops', 'Lỗi', 'error')
-            }
+               if(dataEdit) {
+                finalPayLoad.postId = dataEdit?.id
+                finalPayLoad.attributesId = dataEdit?.attributesId
+                finalPayLoad.imagesId = dataEdit?.imagesId
+                finalPayLoad.overviewId = dataEdit?.overviewId
+               }
+               console.log(finalPayLoad)
+            // const response = await apiCreatePost (finalPayLoad)
+            // if (response?.data.err === 0) {
+            //     Swal.fire('Thành Công', 'Đã thêm bài đăng', 'success').then(() => {
+            //         setPayload({
+            //             categoryCode: '',
+            //             title: '',
+            //             priceNumber: 0,
+            //             areaNumber: 0,
+            //             images: '',
+            //             address: '',
+            //             priceCode: '',
+            //             areaCode: '',
+            //             description: '',
+            //             target: '',
+            //             province: ''
+            //         })
+            //     })
+            // }
+            // else{
+            //     Swal.fire('Oops', 'Lỗi', 'error')
+            // }
         }
     
     }
@@ -149,7 +164,7 @@ const CreatePost = ({isEdit}) => {
                             </div>
                         </div>
                     </div>
-                    <Button onClick={handleSubmit} text='Tạo mới' bgColor='bg-green-600' textColor='text-white' />
+                    <Button onClick={handleSubmit} text={isEdit ? 'Cập nhật' : 'Tạo mới'} bgColor='bg-green-600' textColor='text-white' />
                     <div className='h-[500px]'></div>
                 </div>
                 <div className='w-[30%] flex-none'>
