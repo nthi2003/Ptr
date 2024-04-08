@@ -185,7 +185,7 @@ export const getPostsLimitAdminService = (page, id, query) => new Promise(async 
                 { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] },
                 { model: db.Overview, as: 'overviews'},
             ],
-            attributes: ['id', 'title', 'star', 'address', 'description']
+            // attributes: ['id', 'title', 'star', 'address', 'description']
         })
         resolve({
             err: response ? 0 : 1,

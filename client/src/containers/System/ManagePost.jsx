@@ -1,22 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions';
 import moment from 'moment';
-import { Button } from '../../components'
+import { Button , UpdatePost } from '../../components';
+
 const ManagePost = () => {
-  const dispatch = useDispatch(); // Corrected dispatch spelling
+  const dispatch = useDispatch(); 
+  const [isEdit, setIsEdit] = useState(false);
+
   const { postOfCurrent } = useSelector(state => state.post);
 
   useEffect(() => {
-    dispatch(actions.getPostsLimitAdmin()); // Corrected dispatch spelling
+    dispatch(actions.getPostsLimitAdmin());
   }, []);
 
-  const checkStatus = (dateString) =>  moment(dateString , process.env.REACT_APP_FORMAT_DATE).isAfter(new Date().toDateString())
-  console.log(checkStatus('8/10/2023'))
+  const checkStatus = (dateString) => moment(dateString, process.env.REACT_APP_FORMAT_DATE).isAfter(new Date().toDateString());
+
   return (
-    <div className='flex flex-col gap-6'>
+    <div className='flex flex-col gap-6 '>
       <div className='py-4 border-b border-gray-200 flex items-center justify-between'>
-        <h1 className='text-3xl font-medium '>Quản lí tin đăng</h1>
+        <h1 className='text-3xl font-medium'>Quản lí tin đăng</h1>
         <select className='outline-none border p-2 border-gray-200 rounded-md'>
           <option value="">Lọc theo trạng thái</option>
         </select>
@@ -55,7 +58,10 @@ const ManagePost = () => {
                       text='Sửa'
                       bgColor='bg-green-600'
                       textColor='text-white'
-                      
+                      onClick={() => {
+                        dispatch(actions.editData(item))
+                        setIsEdit(true);
+                      }}
                     />
                     <Button 
                       text='Xóa'
@@ -70,6 +76,7 @@ const ManagePost = () => {
           }
         </tbody>
       </table>
+      {isEdit && <UpdatePost  setIsEdit={setIsEdit} />} {/* Changed 'dadaEdit' to 'dataEdit' */}
     </div>
   );
 };
