@@ -197,15 +197,14 @@ export const getPostsLimitAdminService = (page, id, query) => new Promise(async 
         reject(error)
     }
 })
-export const updatePost = ({ postId, overviewId, imagesId , attributesId ,...payload }) => new Promise(async (resolve, reject) => {
+export const updatePost = ({ postId, overviewId, imagesId , attributesId ,...body }) => new Promise(async (resolve, reject) => {
     try {
         const labelCode = generateCode(body.label)
         await db.Post.update({
-           
             title: body.title || null,
             labelCode,
             address: body.address || null,
-  
+
             categoryCode: body.categoryCode ,
             description: JSON.stringify(body.description) || null,
             areaCode: body.areaCode || null,
@@ -265,7 +264,6 @@ export const updatePost = ({ postId, overviewId, imagesId , attributesId ,...pay
         resolve({
             err: 0,
             msg: 'Updated',
-            response
         })
 
     } catch (error) {

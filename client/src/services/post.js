@@ -81,7 +81,7 @@ export const apiUpdatePost = (payload) => new Promise(async (resolve, reject) =>
     try {
         const response = await axiosConfig({
             method: 'put',
-            url: `/api/v1/post/limit-admin`,
+            url: `/api/v1/post/update`,
             data: payload
         })
         resolve(response)

@@ -37,7 +37,7 @@ const Overview = ({ payload, setPayload, invalidFields, setInvalidFields }) => {
                     <InputReadOnly label='Điện thoại' value={currentData?.phone} />
                     <InputFormV2 value={payload.priceNumber} setValue={setPayload} small='Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000' label='Giá cho thuê' unit='đồng' name='priceNumber' setInvalidFields={setInvalidFields} invalidFields={invalidFields}/>
                     <InputFormV2 value={payload.areaNumber} setValue={setPayload} name='areaNumber' label='Diện tích' unit='m2' setInvalidFields={setInvalidFields} invalidFields={invalidFields}/>
-                    <Select value={dataEdit?.overview?.target || payload.target} setValue={setPayload} name='target' options={targets} label='Đối tượng cho thuê' setInvalidFields={setInvalidFields} invalidFields={invalidFields} />
+                    <Select value={ payload.target} setValue={setPayload} name='target' options={targets} label='Đối tượng cho thuê' setInvalidFields={setInvalidFields} invalidFields={invalidFields} />
                 </div>
             </div>
 

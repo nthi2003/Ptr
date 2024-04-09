@@ -25,34 +25,21 @@ const Address = ({ setPayload, invalidFields, setInvalidFields }) => {
         fetchProvinces();
     }, []);
 
-    useEffect(() => {
-        setDistrict(''); // Reset district when province changes
-        const fetchDistricts = async () => {
-            try {
-                if (province) {
-                    const response = await apiGetPublicDistrict(province);
-                    if (response.status === 200) {
-                        setDistricts(response.data?.results || []);
-                    }
-                }
-                setReset(!province);
-            } catch (error) {
-                console.error('Error fetching districts:', error);
-            }
-        };
-        fetchDistricts();
-    }, [province]);
 
     useEffect(() => {
+       if(dataEdit) {
         const addressArr = dataEdit?.address?.split(',');
-        const foundProvince = provinces.find(item => item.province_name === addressArr?.[addressArr.length - 1]?.trim());
+        const foundProvince = province?.length  && provinces?.find(item => item.province_name === addressArr?.[addressArr.length - 1]?.trim());
         setProvince(foundProvince ? foundProvince.province_id : '');
+       }
     }, [provinces, dataEdit]);
 
     useEffect(() => {
-        const addressArr = dataEdit?.address?.split(',');
-        const foundDistrict = districts.find(item => item.district_name === addressArr?.[addressArr.length - 2]?.trim());
+        if(dataEdit) {
+            const addressArr = dataEdit?.address?.split(',');
+        const foundDistrict = district?.length > 0 && districts.find(item => item.district_name === addressArr?.[addressArr.length - 2]?.trim());
         setDistrict(foundDistrict ? foundDistrict.district_id : '');
+        }
     }, [districts, dataEdit]);
 
     useEffect(() => {

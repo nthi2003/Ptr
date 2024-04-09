@@ -1,79 +1,81 @@
-import React, { useEffect, useState } from 'react'
-import { Overview, Address, Loading, Button } from '../../components'
-import { apiUploadImages } from '../../services'
-import icons from '../../ultils/icons'
-import { getCodes, getCodesArea } from '../../ultils/Common/getCodes'
-import { useSelector } from 'react-redux'
-import { apiCreatePost } from '../../services'
+import React, { useEffect, useState } from 'react';
+import { Overview, Address, Loading, Button } from '../../components';
+import { apiUpdatePost, apiUploadImages } from '../../services';
+import icons from '../../ultils/icons';
+import { getCodes, getCodesArea } from '../../ultils/Common/getCodes';
+import { useSelector } from 'react-redux';
+import { apiCreatePost } from '../../services';
 import Swal from 'sweetalert2';
-import validate from '../../ultils/Common/validateFields'
-const { BsCameraFill, ImBin } = icons
-const CreatePost = ({isEdit}) => {
-    const {dataEdit} =  useSelector(state => state.post)
-    const [payload, setPayload] = useState(() =>{
-        const initData = {
-        categoryCode: dataEdit?.categoryCode || '',
-        title: dataEdit?.title || '',
-        priceNumber: dataEdit?.priceNumber * 1000000 || 0,
-        areaNumber: dataEdit?.areaNumber || 0,
-        images: JSON.parse(dataEdit?.images?.image  ) || '',
-        address: dataEdit?.address || '',
-        priceCode: dataEdit?.priceCode || '',
-        areaCode: dataEdit?.areaCode || '',
-        description: JSON.parse(dataEdit?.description) || '',
-        target: dataEdit?.target || '',
-        province: dataEdit?.province || ''
-        }
-        return initData
-    })
-    const [imagesPreview, setImagesPreview] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
-    const { prices, areas, categories, province } = useSelector(state => state.app)
-    const { currentData } = useSelector(state => state.user)
-    const [invalidFields, setInvalidFields] = useState([])
-    console.log(dataEdit)
-    useEffect(() => {
-        if (dataEdit) {
-            let images = JSON.parse(dataEdit?.images?.image)
-            images && setImagesPreview(images)
+import validate from '../../ultils/Common/validateFields';
+import { useDispatch } from 'react-redux';
+import { resetDataEdit } from '../../store/actions'
+const { BsCameraFill, ImBin } = icons;
 
+const CreatePost = ({ isEdit }) => {
+    const dispatch = useDispatch()
+    const { dataEdit } = useSelector(state => state.post);
+    const [payload, setPayload] = useState(() => {
+        const initData = {
+            categoryCode: dataEdit?.categoryCode || '',
+            title: dataEdit?.title || '',
+            priceNumber: dataEdit?.priceNumber * 1000000 || 0,
+            areaNumber: dataEdit?.areaNumber || 0,
+            images: dataEdit?.images?.image ? JSON.parse(dataEdit.images.image) : '',
+            address: dataEdit?.address || '',
+            priceCode: dataEdit?.priceCode || '',
+            areaCode: dataEdit?.areaCode || '',
+            description: dataEdit?.description ? JSON.parse(dataEdit.description) : '',
+            target: dataEdit?.overviews?.target || '',
+            province: dataEdit?.province || ''
+        };
+        return initData;
+    });
+    
+    const [imagesPreview, setImagesPreview] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const { prices, areas, categories, provinces } = useSelector(state => state.app);
+    const { currentData } = useSelector(state => state.user);
+    const [invalidFields, setInvalidFields] = useState([]);
+
+    useEffect(() => {
+        if (dataEdit && dataEdit.images && dataEdit.images.image) {
+            let images = JSON.parse(dataEdit.images.image);
+            images && setImagesPreview(images);
         }
-    }, [dataEdit])
+    }, [dataEdit]);
 
     const handleFiles = async (e) => {
-        e.stopPropagation()
-        setIsLoading(true)
-        let images = []
-        let files = e.target.files
-        let formData = new FormData()
+        e.stopPropagation();
+        setIsLoading(true);
+        let images = [];
+        let files = e.target.files;
+        let formData = new FormData();
         for (let i of files) {
-            formData.append('file', i)
-            formData.append('upload_preset', process.env.REACT_APP_UPLOAD_ASSETS_NAME)
-            let response = await apiUploadImages(formData)
-            if (response.status === 200) images = [...images, response.data?.secure_url]
+            formData.append('file', i);
+            formData.append('upload_preset', process.env.REACT_APP_UPLOAD_ASSETS_NAME);
+            let response = await apiUploadImages(formData);
+            if (response.status === 200) images = [...images, response.data?.secure_url];
         }
-        setIsLoading(false)
-        setImagesPreview(prev => [...prev, ...images])
-        setPayload(prev => ({ ...prev, images: [...prev.images, ...images] }))
-    }
+        setIsLoading(false);
+        setImagesPreview(prev => [...prev, ...images]);
+        setPayload(prev => ({ ...prev, images: [...prev.images, ...images] }));
+    };
 
     const handleDeleteImage = (image) => {
-        setImagesPreview(prev => prev?.filter(item => item !== image))
+        setImagesPreview(prev => prev?.filter(item => item !== image));
         setPayload(prev => ({
             ...prev,
             images: prev.images?.filter(item => item !== image)
-        }))
-    }
+        }));
+    };
 
     const handleSubmit = async () => {
-        let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10, 6), prices, 1, 15)
-        let areaCodeArr = getCodesArea(+payload.areaNumber, areas, 0, 90)
+        let priceCodeArr = getCodes(+payload.priceNumber / Math.pow(10, 6), prices, 1, 15);
+        let areaCodeArr = getCodesArea(+payload.areaNumber, areas, 0, 90);
 
         // Extracting codes
-        let priceCode = priceCodeArr[0]?.code
-        let areaCode = areaCodeArr[0]?.code
-
-        console.log({ priceCode, areaCode })
+        let priceCode = priceCodeArr[0]?.code;
+        let areaCode = areaCodeArr[0]?.code;
 
         let finalPayLoad = {
             ...payload,
@@ -83,41 +85,53 @@ const CreatePost = ({isEdit}) => {
             priceNumber: +payload.priceNumber / Math.pow(10, 6),
             target: payload.target || 'Tất cả',
             label: `${categories?.find(item => item.code === payload?.categoryCode)?.value} ${payload?.address?.split(',')[0]}`
+        };
 
-        }
-    
-        const result = validate(finalPayLoad, setInvalidFields)
+        const result = validate(finalPayLoad, setInvalidFields);
         if (result === 0)  {
-               if(dataEdit) {
-                finalPayLoad.postId = dataEdit?.id
-                finalPayLoad.attributesId = dataEdit?.attributesId
-                finalPayLoad.imagesId = dataEdit?.imagesId
-                finalPayLoad.overviewId = dataEdit?.overviewId
-               }
-               console.log(finalPayLoad)
-            // const response = await apiCreatePost (finalPayLoad)
-            // if (response?.data.err === 0) {
-            //     Swal.fire('Thành Công', 'Đã thêm bài đăng', 'success').then(() => {
-            //         setPayload({
-            //             categoryCode: '',
-            //             title: '',
-            //             priceNumber: 0,
-            //             areaNumber: 0,
-            //             images: '',
-            //             address: '',
-            //             priceCode: '',
-            //             areaCode: '',
-            //             description: '',
-            //             target: '',
-            //             province: ''
-            //         })
-            //     })
-            // }
-            // else{
-            //     Swal.fire('Oops', 'Lỗi', 'error')
-            // }
+            if(dataEdit && isEdit) {
+                finalPayLoad.postId = dataEdit?.id;
+                finalPayLoad.attributesId = dataEdit?.attributesId;
+                finalPayLoad.imagesId = dataEdit?.imagesId;
+                finalPayLoad.overviewId = dataEdit?.overviewId;
+
+                const response = await apiUpdatePost(finalPayLoad);
+                if (response?.data.err === 0) {
+                    Swal.fire('Thành Công', 'Đã chỉnh sửa bài viết thành công', 'success').then(() => {
+                        resetPayload()
+                        dispatch(resetDataEdit())
+                    })
+         
+                  
+                } else {
+                    Swal.fire('Oops', 'Lỗi', 'error');
+                }
+            } else {
+                const response = await apiCreatePost(finalPayLoad);
+                if (response?.data.err === 0) {
+                    Swal.fire('Thành Công', 'Đã thêm bài đăng', 'success').then(() => {
+                        resetPayload()
+                    });
+                } else {
+                    Swal.fire('Oops', 'Lỗi', 'error');
+                }
+            }
         }
-    
+    };
+    const resetPayload = () => {
+        setPayload({
+                categoryCode: '',
+            title: '',
+            priceNumber: 0,
+            areaNumber: 0,
+            images: '',
+            address: '',
+            priceCode: '',
+            areaCode: '',
+            description: '',
+            target: '',
+            province: ''
+        });
     }
 
     return (
@@ -158,7 +172,7 @@ const CreatePost = ({isEdit}) => {
                                                     <ImBin />
                                                 </span>
                                             </div>
-                                        )
+                                        );
                                     })}
                                 </div>
                             </div>
@@ -173,7 +187,7 @@ const CreatePost = ({isEdit}) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default CreatePost
+export default CreatePost;

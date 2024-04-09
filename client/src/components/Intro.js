@@ -31,7 +31,7 @@ const Intro = () => {
                         )
                     })}
                 </span>
-                {text.description2}
+                {text.description}
             </p>
             <div className='flex items-center justify-around w-full'>
                 {text.statistic.map((item, index) => {
