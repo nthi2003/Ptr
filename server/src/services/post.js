@@ -270,3 +270,20 @@ export const updatePost = ({ postId, overviewId, imagesId , attributesId ,...bod
         reject(error)
     }
 })
+export const deletePost = (postId) => new Promise(async (resolve, reject) => {
+    try {
+      
+        const response = await db.Post.destroy({
+            where: {id :postId} 
+            
+        })
+        resolve({
+            err: response > 0 ? 0 : 1,
+            msg: response > 0 ? 'Delete' : 'No post delete.',
+            response
+        })
+
+    } catch (error) {
+        reject(error)
+    }
+})

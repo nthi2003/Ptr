@@ -90,3 +90,16 @@ export const apiUpdatePost = (payload) => new Promise(async (resolve, reject) =>
         reject(error)
     }
 })
+export const apiDeletePost = (postId) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'delete',
+            url: `/api/v1/post/delete`,
+            params: { postId }
+        })
+        resolve(response)
+
+    } catch (error) {
+        reject(error)
+    }
+})
