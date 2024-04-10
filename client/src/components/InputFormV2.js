@@ -5,19 +5,22 @@ const InputFormV2 = ({ label, unit, value, setValue, name, small, setInvalidFiel
     return (
         <div className={`flex ${direction ? direction : 'flex-col'}`}> 
             <label className='w-48 flex-none' htmlFor={name}>{label}</label>
-            <div className='flex items-center flex-auto'>
+            <div className='flex items-center flex-col flex-auto'>
+                <div className='flex w-full items-center'>
                 <input
                     type="text"
                     id={name}
                     className={`${unit ? 'rounded-tl-md rounded-bl-md' : 'rounded-md'} outline-none border flex-auto  border-gray-300 p-2`}
                     value={value}
                     onChange={(e) => setValue(prev => ({ ...prev, [name]: e.target.value }))}
-                    onFocus={() => setInvalidFields([])}
+                    onFocus={() => setInvalidFields && setInvalidFields([])}
                 />
                 {unit && <span className='p-2 border flex-none w-16 flex items-center justify-center rounded-tr-md rounded-br-md bg-gray-200'>{unit}</span>}
+                </div>
+                {invalidFields?.some(item => item.name === name) && <small className='text-red-500 block w-full'>{invalidFields?.find(item => item.name === name)?.message}</small>}
             </div>
-            {small && <small className='opacity-70 whitespace-nowrap'>{small}</small>}
-            {invalidFields?.some(item => item.name === name) && <small className='text-red-500 block w-full'>{invalidFields?.find(item => item.name === name)?.message}</small>}
+            {small && <small className='opacity-70 whitespace-nowrap'>{small}</small>} 
+           
         </div>
     );
 };
