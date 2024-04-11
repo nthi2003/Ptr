@@ -1,35 +1,38 @@
 import React, { useState } from 'react';
 import { InputReadOnly, InputFormV2, Button } from '../../components';
 import anonAvatar from '../../assets/anon-avatar.png'; // Corrected the typo in 'assets'
-import { useSelector } from 'react-redux';
-import { apiUploadImages, apiUpdateUser } from '../../services';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { apiUpdateUser } from '../../services';
+import { fileToBase64, blobToBase64 } from '../../ultils/Common/tobase64';
+import { getCurrent } from '../../store/actions';
+import Swal from 'sweetalert2';
 const EditAccount = () => {
 
     const { currentData } = useSelector(state => state.user)
+    const dispatch = useDispatch()
     const [payload, setPayload] = useState({
         name: currentData?.name ||'',
-        avatar: currentData?.avatar ,
+        avatar: blobToBase64(currentData?.avatar) || '' ,
         fbUrl: currentData?.fbUrl || '',
         zalo: currentData?.zalo || ''
     })
     const handleSubmit = async() => {
        const response = await apiUpdateUser(payload)
-       console.log(response)
-    console.log(payload)
+       if ( response?.data.err === 0){
+           Swal.fire('Done', 'Chỉnh sửa thông tin cá nhân thành công', 'success').then(() => {
+                 dispatch(getCurrent())
+           })
+       }else{
+        Swal.fire('Oops !', 'Chỉnh sửa thông tin cá nhân thành công' , 'error')
+       }
+
     }
     const handleUploadFile = async(e) => {
-        const image = e.target.files[0]
-        const formData = new FormData();
-        formData.append('file', image);
-        formData.append('upload_preset', process.env.REACT_APP_UPLOAD_ASSETS_NAME);
-        const response = await apiUploadImages(formData)
-        if (response.status === 200) {
-            setPayload(prev => ({
-                ...prev,
-                avatar: response.data.secure_url
-            }))
-        }
+        const imageBase64 = await fileToBase64(e.target.files[0])
+        setPayload(prev => ({
+              ...prev,
+              avatar: imageBase64
+        }))
     }
     return ( 
         <div className='flex flex-col h-full items-center'>
