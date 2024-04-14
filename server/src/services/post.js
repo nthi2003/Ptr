@@ -27,40 +27,41 @@ export const getPostsService = () => new Promise(async (resolve, reject) => {
         reject(error)
     }
 })
-export const getPostsLimitService = (page, query, {priceNumber, areaNumber}) => new Promise(async (resolve, reject) => {
+export const getPostsLimitService = (page, { limitPost, order, ...query } = {}, { priceNumber, areaNumber } = {}) => new Promise(async (resolve, reject) => {
     try {
-        let offset = (!page || +page <= 1) ? 0 : (+page - 1)
-        const queries = { ...query }
-        if (priceNumber)  queries.priceNumber = {[Op.between] : priceNumber } 
-        if (areaNumber)  queries.areaNumber = {[Op.between] : areaNumber } 
-        //         priceNumber: priceNumber ? {[Op.between]: priceNumber} : ,
-        //         areaNumber: {
-        //             [Op.between]: areaNumber
-        //         }
-        // }
+        let offset = (!page || +page <= 1) ? 0 : (+page - 1);
+        const queries = { ...query };
+        const limit = limitPost ? +limitPost : +process.env.LIMIT;
+
+        if (priceNumber) queries.priceNumber = { [Op.between]: priceNumber };
+        if (areaNumber) queries.areaNumber = { [Op.between]: areaNumber };
+        if (order) queries.order = [order];
+
         const response = await db.Post.findAndCountAll({
-            where: queries ,
+            where: queries,
             raw: true,
             nest: true,
-            offset: offset * +process.env.LIMIT,
-            limit: +process.env.LIMIT,
+            offset: offset * limit,
+            limit: limit,
             include: [
                 { model: db.Image, as: 'images', attributes: ['image'] },
                 { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
                 { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] },
             ],
             attributes: ['id', 'title', 'star', 'address', 'description']
-        })
+        });
+
         resolve({
             err: response ? 0 : 1,
-            msg: response ? 'OK' : 'Getting posts is failed.',
+            msg: response ? 'OK' : 'Failed to fetch posts.',
             response
-        })
-
+        });
     } catch (error) {
-        reject(error)
+        reject(error);
     }
-})
+});
+
+
 export const getNewPostService = () => new Promise(async (resolve, reject) => {
  
     try {
