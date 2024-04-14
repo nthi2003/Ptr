@@ -21,6 +21,7 @@ const menuManage = [
         path: '/he-thong/thong-tin-tai-khoan',
         icon: <BiUserPin />
     }
+ 
 ]
 
 export default menuManage

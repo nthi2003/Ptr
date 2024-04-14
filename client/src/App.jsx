@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Home, Login, Rental, Homepage, DetailPost, SearchDetail } from './containers/Public';
+import { Home, Login, Rental, Homepage, DetailPost, SearchDetail, Contact } from './containers/Public';
 import { path } from './ultils/constant';
 import { System, CreatePost, ManagePost, EditAccount } from './containers/System'; // Import ManagePost
 import * as actions from './store/actions';
@@ -34,6 +34,7 @@ function App() {
           <Route path={path.NHA_CHO_THUE} element={<Rental />} />
           <Route path={path.SEARCH} element={<SearchDetail />} />
           <Route path={path.DETAL_POST__TITLE__POSTID} element={<DetailPost />} />
+          <Route path={path.CONTACT} element={<Contact />} />
           <Route path={'chi-tiet/*'} element={<DetailPost />} />
         </Route>
         <Route path={path.SYSTEM} element={<System />} >
