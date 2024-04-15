@@ -19,6 +19,9 @@ const SliderCustom = ({images}) => {
                      alt='slider'
                      className='object-contain m-auto h-full'
                    />
+                   <div>
+                    
+                   </div>
             </div>
           )
          })}
