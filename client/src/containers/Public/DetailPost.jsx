@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPostsLimit } from '../../store/actions'
-import { Slider } from '../../components'
+import { Slider , BoxInfo } from '../../components'
 import icons from '../../ultils/icons'
 import objToArr from '../../ultils/Common/objToArr'
+
 const { HiLocationMarker, TbReportMoney, RiCrop2Line, BsStopwatch, BsHash } = icons
+
 const DetailPost = () => {
    const { postId } = useParams()
    const dispatch = useDispatch()
@@ -121,13 +123,11 @@ const DetailPost = () => {
                   </tbody>
                </table> 
             </div>
-            <div className='mt-8'>
-            <h3 className='font-semibold text-xl my-4 '>Bản đồ</h3>
-            </div>
+           
             </div> 
          </div>
          <di className='w-[30%]'>
-            content
+            <BoxInfo userData={posts[0]?.user}/>
          </di>
       </div>
    )
