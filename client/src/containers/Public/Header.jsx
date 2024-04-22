@@ -28,13 +28,14 @@ const Header = () => {
     return (
         <div ref={headerRef} className='w-3/5 '>
             <div className='w-full flex items-center justify-between'>
-                <Link to={'/'} >
+                <h1 className="">LOGO</h1>
+                {/* <Link to={'/'} >
                     <img
-                        src={logo}
+                        src=''
                         alt="logo"
                         className='w-[240px] h-[70px] object-contain'
                     />
-                </Link>
+                </Link> */}
                 <div className='flex items-center gap-1'>
                     {!isLoggedIn && <div className='flex items-center gap-1'>
                         <small>Phongtro123.com xin chào !</small>

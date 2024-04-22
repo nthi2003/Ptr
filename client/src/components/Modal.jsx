@@ -89,15 +89,15 @@ const Modal = ({ setIsShowModal, content, name, handleSubmit, queries, arrMinMax
 
     return (
         <div onClick={() => { setIsShowModal(false) }}
-            className='fixed top-0 left-0 right-0 bottom-0 bg-overlay-70 z-20 flex justify-center items-center'
+            className='fixed top-0 left-0 right-0 bottom-0 bg-overlay-70 z-20 flex justify-center items-center overflow-y-auto'
         >
             <div onClick={(e) => {
                 e.stopPropagation()
                 setIsShowModal(true)
             }}
-                className='w-2/5 h-[500px] bg-white rounded-md relative'
+                className='w-2/5 h-[500px] bg-white rounded-md relative max-w-1100  overflow-y-auto '
             >
-                <div className='h-[45px] px-4 flex items-center border-b border-gray-200'>
+                <div className='h-[45px] px-4 flex items-center border-b border-gray-200  '>
                     <span className='cursor-pointer' onClick={(e) => {
                         e.stopPropagation()
                         setIsShowModal(false)
